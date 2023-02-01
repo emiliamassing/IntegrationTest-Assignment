@@ -25,14 +25,19 @@ describe('Tests for init', () => {
 });
 
 describe('Tests for disPlayNoResult', () => {
-    /*test('Should display error text', () => {
+    test('Should create p element and display text', () => {
         document.body.innerHTML = `
-            <div id="movie-container">
-                <p></p>
-            </div>
+            <div id="movie-container"></div>
         `;
 
-        const errorMessage: HTMLParagraphElement = document.querySelector('p') as HTMLParagraphElement;
-        errorMessage?.innerHTML('Display error');
-    });*/
+        const container = document.querySelector('#movie-container') as HTMLDivElement;
+        const newPElement = `<p>Inga sökresultat att visa</p>`;
+
+        movieApp.displayNoResult(container);
+
+        let htmlResult = document.querySelector('#movie-container')?.innerHTML;
+        let htmlClass = document.querySelector('#movie-container')?.firstElementChild;
+
+        expect(htmlResult).toEqual(newPElement);
+    });
 });
