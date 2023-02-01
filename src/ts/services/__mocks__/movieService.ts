@@ -21,3 +21,9 @@ let testData: IMovie[] = [
         Year: '2005' 
     },
 ];
+
+export async function getData(): Promise<IMovie[]> {
+    return new Promise((resolve) => {
+        resolve(testData);
+    });
+};
