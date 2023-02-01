@@ -23,3 +23,16 @@ describe('Tests for init', () => {
         spyOnHandleSubmit.mockRestore();
     });
 });
+
+describe('Tests for disPlayNoResult', () => {
+    /*test('Should display error text', () => {
+        document.body.innerHTML = `
+            <div id="movie-container">
+                <p></p>
+            </div>
+        `;
+
+        const errorMessage: HTMLParagraphElement = document.querySelector('p') as HTMLParagraphElement;
+        errorMessage?.innerHTML('Display error');
+    });*/
+});
