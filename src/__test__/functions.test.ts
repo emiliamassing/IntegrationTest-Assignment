@@ -6,7 +6,7 @@ import * as functions from "../ts/functions";
 
 describe('Tests for movieSort', () => {
 
-    test('Should sort movies in a-z order', () => {
+    test('Should sort movies when desc is true, accending', () => {
         document.body.innerHTML= `
             <div id="movie-container"></div>
         `;
@@ -30,17 +30,24 @@ describe('Tests for movieSort', () => {
                 Type: 'movie',
                 Poster: 'picture',
                 Year: '2005' 
-            }
+            },
+            {   Title: 'Revenge Of The Sith',
+                imdbID: 'tt0121766', 
+                Type: 'movie',
+                Poster: 'picture',
+                Year: '2005' 
+            },
         ];
 
         functions.movieSort(movieList, true);
 
         expect(movieList[0].Title).toEqual('Attack Of The Clones');
         expect(movieList[1].Title).toEqual('Revenge Of The Sith');
-        expect(movieList[2].Title).toEqual('The Phantom Menace');
+        expect(movieList[2].Title).toEqual('Revenge Of The Sith');
+        expect(movieList[3].Title).toEqual('The Phantom Menace');
     });
 
-    test('Should sort movies in z-a order', () => {
+    test('Should sort movies when desc is false, deccending', () => {
         document.body.innerHTML= `
             <div id="movie-container"></div>
         `;
@@ -64,13 +71,20 @@ describe('Tests for movieSort', () => {
                 Type: 'movie',
                 Poster: 'picture',
                 Year: '2005' 
-            }
+            },
+            {   Title: 'Revenge Of The Sith',
+                imdbID: 'tt0121766', 
+                Type: 'movie',
+                Poster: 'picture',
+                Year: '2005' 
+            },
         ];
 
         functions.movieSort(movieList, false);
 
         expect(movieList[0].Title).toEqual('The Phantom Menace');
         expect(movieList[1].Title).toEqual('Revenge Of The Sith');
-        expect(movieList[2].Title).toEqual('Attack Of The Clones');
+        expect(movieList[2].Title).toEqual('Revenge Of The Sith');
+        expect(movieList[3].Title).toEqual('Attack Of The Clones');
     });
 });
