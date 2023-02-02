@@ -22,8 +22,22 @@ let testData: IMovie[] = [
     },
 ];
 
-export async function getData(): Promise<IMovie[]> {
-    return new Promise((resolve) => {
-        resolve(testData);
+let emptyData: IMovie[] = [
+    {
+        Title: '',
+        imdbID: '',
+        Type: '', 
+        Poster: '', 
+        Year: '' 
+    },
+];
+
+export async function getData(searchText: string): Promise<IMovie[]> {
+    return new Promise((resolve, reject) => {
+        if(+searchText > 0){
+            resolve(testData);
+        } else{
+            reject(emptyData);
+        }
     });
 };

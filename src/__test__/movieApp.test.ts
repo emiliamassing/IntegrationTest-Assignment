@@ -3,6 +3,7 @@
 */
 import { IMovie } from "../ts/models/Movie";
 import * as movieApp from "../ts/movieApp";
+import * as movieService from "../ts/services/movieservice";
 
 describe('Tests for init', () => {
     test('Should spy on handleSubmit()', () =>{
@@ -22,6 +23,22 @@ describe('Tests for init', () => {
         (document.querySelector('#searchForm') as HTMLFormElement)?.submit();
         expect(spyOnHandleSubmit).toHaveBeenCalledTimes(1);
         spyOnHandleSubmit.mockRestore();
+    });
+});
+
+describe('Tests for handeSubmit', () => {
+    test('Should call on getData', async () => {
+        document.body.innerHTML = `
+        <form id="searchForm">
+            <input type="text" id="searchText" placeholder="Skriv titel här" />
+            <button type="submit" id="search">Sök</button>
+        </form>
+        `;
+
+        const searchText = document.querySelector('#searchText') as HTMLInputElement;
+        searchText.value = 'A New Hope';
+
+        //const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue();
     });
 });
 
