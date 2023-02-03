@@ -1,6 +1,6 @@
 import { IMovie } from "../../models/Movie";
 
-let testData: IMovie[] = [
+export let testData: IMovie[] = [
     {
         Title: 'The Phantom Menace',
         imdbID: 'tt0120915',

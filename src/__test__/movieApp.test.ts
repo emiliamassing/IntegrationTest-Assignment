@@ -4,7 +4,6 @@
 import { IMovie } from "../ts/models/Movie";
 import * as movieApp from "../ts/movieApp";
 import { getData } from "../ts/services/__mocks__/movieService";
-import * as movieService from "../ts/services/movieservice";
 
 jest.mock('../ts/services/movieservice.ts');
 
