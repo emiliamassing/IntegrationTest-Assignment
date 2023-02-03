@@ -5,6 +5,10 @@ import { IMovie } from "../ts/models/Movie";
 import * as movieApp from "../ts/movieApp";
 import * as movieService from "../ts/services/movieservice";
 
+beforeEach(() => {
+    document.body.innerHTML = '';
+});
+
 describe('Tests for init', () => {
     test('Should spy on handleSubmit()', () =>{
         document.body.innerHTML = `
@@ -26,19 +30,32 @@ describe('Tests for init', () => {
     });
 });
 
-describe('Tests for handeSubmit', () => {
+describe('Tests for handleSubmit', () => {
     test('Should call on getData', async () => {
         document.body.innerHTML = `
-        <form id="searchForm">
             <input type="text" id="searchText" placeholder="Skriv titel här" />
-            <button type="submit" id="search">Sök</button>
-        </form>
+            <div id="movie-container"></div>
         `;
+
+        const movie = {  
+            Title: 'Revenge Of The Sith',
+            imdbID: 'tt0121766', 
+            Type: 'movie',
+            Poster: 'picture',
+            Year: '2005' 
+        };
 
         const searchText = document.querySelector('#searchText') as HTMLInputElement;
         searchText.value = 'A New Hope';
 
-        //const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue();
+        const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue(new Promise<IMovie[]>((resolve) => {
+            resolve([movie]);
+        }));
+
+        await movieApp.handleSubmit();
+
+        expect(getDataSpy).toBeCalledWith('A New Hope');
+        getDataSpy.mockRestore();
     });
 });
 
