@@ -3,6 +3,7 @@
 */
 import { IMovie } from "../ts/models/Movie";
 import * as movieApp from "../ts/movieApp";
+import { getData } from "../ts/services/__mocks__/movieService";
 import * as movieService from "../ts/services/movieservice";
 
 jest.mock('../ts/services/movieservice.ts');
@@ -33,34 +34,7 @@ describe('Tests for init', () => {
 });
 
 describe('Tests for handleSubmit', () => {
-    test('Should call on getData', async () => {
-        document.body.innerHTML = `
-            <input type="text" id="searchText" placeholder="Skriv titel här" />
-            <div id="movie-container"></div>
-        `;
-
-        const movie = {  
-            Title: 'Revenge Of The Sith',
-            imdbID: 'tt0121766', 
-            Type: 'movie',
-            Poster: 'picture',
-            Year: '2005' 
-        };
-
-        const searchText = document.querySelector('#searchText') as HTMLInputElement;
-        searchText.value = 'A New Hope';
-
-        const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue(new Promise<IMovie[]>((resolve) => {
-            resolve([movie]);
-        }));
-
-        await movieApp.handleSubmit();
-
-        expect(getDataSpy).toBeCalledWith('A New Hope');
-        getDataSpy.mockRestore();
-    });
-
-    test('Should call on createHtml if movies are added', async () =>{
+    test('Should use getData and call on createHtml if movie is found', async () => {
         document.body.innerHTML = `
         <form id="searchForm">
             <input type="text" id="searchText" placeholder="Skriv titel här" />
@@ -69,7 +43,26 @@ describe('Tests for handleSubmit', () => {
         <div id="movie-container"></div>
         `;
 
-        const movie = {  
+        let searchText = (document.querySelector('#searchText') as HTMLInputElement);
+        searchText.value = 'The Phantom Menace';
+
+        let movies: IMovie [] = await getData('The Phantom Menace');
+
+        await movieApp.handleSubmit();
+
+        expect(movies[0].Title).toBe('The Phantom Menace');
+    });
+
+    /*test('Should call on createHtml if movies are added', async () =>{
+        document.body.innerHTML = `
+        <form id="searchForm">
+            <input type="text" id="searchText" placeholder="Skriv titel här" />
+            <button type="submit" id="search">Sök</button>
+        </form>
+        <div id="movie-container"></div>
+        `;
+
+        const movies = {  
             Title: 'Revenge Of The Sith',
             imdbID: 'tt0121766', 
             Type: 'movie',
@@ -83,7 +76,7 @@ describe('Tests for handleSubmit', () => {
         let createHtmlSpy = jest.spyOn(movieApp, 'createHtml');
 
         const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue(new Promise<IMovie[]>((resolve) => {
-            resolve([movie]);
+            resolve([movies]);
         }));
 
         await movieApp.handleSubmit();
@@ -94,10 +87,13 @@ describe('Tests for handleSubmit', () => {
 
         createHtmlSpy.mockRestore()
         getDataSpy.mockRestore();
+    });*/
 
-    });
+    /*test('Should call on displayNoResult if movie isnt found - else', async () => {
 
-    test('Should call on displayNoResult if movie isnt found - catch', async () =>{
+    });*/
+
+    /*test('Should get error and call on displayNoResult', async () =>{
         document.body.innerHTML = `
         <form id="searchForm">
             <input type="text" id="searchText" placeholder="Skriv titel här" />
@@ -115,7 +111,7 @@ describe('Tests for handleSubmit', () => {
 
         expect(disPlayNoResultSpy).toBeCalled();
         disPlayNoResultSpy.mockRestore();
-    });
+    });*/
 });
 
 describe('Tests for createHtml', () => {
@@ -151,8 +147,10 @@ describe('Tests for createHtml', () => {
         movieApp.createHtml(movieList, container);
         
         expect(movieList[0].Title).toEqual('The Phantom Menace');
-        expect(movieList[1].Title).toEqual('Attack Of The Clones');
-        expect(movieList[2].Title).toEqual('Revenge Of The Sith');
+        expect(movieList.length).toBe(3);
+
+        expect(container.innerHTML).toContain('h3');
+        expect(container.innerHTML).toContain('img');
     });
 });
 

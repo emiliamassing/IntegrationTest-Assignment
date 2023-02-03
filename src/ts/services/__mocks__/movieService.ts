@@ -22,22 +22,16 @@ let testData: IMovie[] = [
     },
 ];
 
-let emptyData: IMovie[] = [
-    {
-        Title: '',
-        imdbID: '',
-        Type: '', 
-        Poster: '', 
-        Year: '' 
-    },
-];
-
 export async function getData(searchText: string): Promise<IMovie[]> {
     return new Promise((resolve, reject) => {
-        if(+searchText > 0){
+        if(searchText === ''){
+            resolve([]);
+        }
+
+        if(searchText !== 'error'){
             resolve(testData);
         } else{
-            reject(emptyData);
+            reject([]);
         }
     });
 };
