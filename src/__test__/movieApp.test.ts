@@ -34,7 +34,7 @@ describe('Tests for init', () => {
 });
 
 describe('Tests for handleSubmit', () => {
-    test('Should use getData and call on createHtml if movie is found', async () => {
+    test('Should use getData correctly and create html if movie is found', async () => {
         document.body.innerHTML = `
         <form id="searchForm">
             <input type="text" id="searchText" placeholder="Skriv titel här" />
@@ -47,13 +47,15 @@ describe('Tests for handleSubmit', () => {
         searchText.value = 'The Phantom Menace';
 
         let movies: IMovie [] = await getData('The Phantom Menace');
+        let createdContainer = document.getElementsByClassName('movie');
 
         await movieApp.handleSubmit();
 
         expect(movies[0].Title).toBe('The Phantom Menace');
+        expect(createdContainer).toBeTruthy;
     });
 
-    /*test('Should call on createHtml if movies are added', async () =>{
+    test('Should spy on createHtml()', async () => {
         document.body.innerHTML = `
         <form id="searchForm">
             <input type="text" id="searchText" placeholder="Skriv titel här" />
@@ -62,38 +64,38 @@ describe('Tests for handleSubmit', () => {
         <div id="movie-container"></div>
         `;
 
-        const movies = {  
-            Title: 'Revenge Of The Sith',
-            imdbID: 'tt0121766', 
-            Type: 'movie',
-            Poster: 'picture',
-            Year: '2005' 
-        };
+        let searchText = (document.querySelector('#searchText') as HTMLInputElement);
+        searchText.value = 'The Phantom Menace';
 
-        const searchText = document.querySelector('#searchText') as HTMLInputElement;
-        searchText.value = 'Revenge Of The Sith';
-
-        let createHtmlSpy = jest.spyOn(movieApp, 'createHtml');
-
-        const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue(new Promise<IMovie[]>((resolve) => {
-            resolve([movies]);
-        }));
+        const createHtmlSpy = jest.spyOn(movieApp, 'createHtml').mockReturnValue();
 
         await movieApp.handleSubmit();
 
-        expect(createHtmlSpy).toHaveBeenCalledTimes(1);
-        expect(getDataSpy).toBeCalledWith('Revenge Of The Sith');
-        expect(getDataSpy).toHaveBeenCalledTimes(1);
+        expect(createHtmlSpy).toHaveBeenCalled();
+        createHtmlSpy.mockRestore();
+    });
 
-        createHtmlSpy.mockRestore()
-        getDataSpy.mockRestore();
-    });*/
+    test('Should call on displayNoResult if there are no movies', async () => {
+        document.body.innerHTML = `
+        <form id="searchForm">
+            <input type="text" id="searchText" placeholder="Skriv titel här" />
+            <button type="submit" id="search">Sök</button>
+        </form>
+        <div id="movie-container"></div>
+        `;
 
-    /*test('Should call on displayNoResult if movie isnt found - else', async () => {
+        let searchText = (document.querySelector('#searchText') as HTMLInputElement);
+        searchText.value = '';
 
-    });*/
+        const disPlayNoResultSpy = jest.spyOn(movieApp, 'displayNoResult').mockReturnValue();
 
-    /*test('Should get error and call on displayNoResult', async () =>{
+        await movieApp.handleSubmit();
+
+        expect(disPlayNoResultSpy).toHaveBeenCalled();
+        disPlayNoResultSpy.mockRestore();
+    });
+
+    test('Should get error and call on displayNoResult', async () =>{
         document.body.innerHTML = `
         <form id="searchForm">
             <input type="text" id="searchText" placeholder="Skriv titel här" />
@@ -103,7 +105,7 @@ describe('Tests for handleSubmit', () => {
         `;
 
         const searchText = document.querySelector('#searchText') as HTMLInputElement;
-        searchText.value = '';
+        searchText.value = 'error';
 
         let disPlayNoResultSpy = jest.spyOn(movieApp, 'displayNoResult').mockReturnValue(); 
 
@@ -111,7 +113,7 @@ describe('Tests for handleSubmit', () => {
 
         expect(disPlayNoResultSpy).toBeCalled();
         disPlayNoResultSpy.mockRestore();
-    });*/
+    });
 });
 
 describe('Tests for createHtml', () => {
