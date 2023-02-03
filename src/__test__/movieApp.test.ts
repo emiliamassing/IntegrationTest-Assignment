@@ -5,6 +5,8 @@ import { IMovie } from "../ts/models/Movie";
 import * as movieApp from "../ts/movieApp";
 import * as movieService from "../ts/services/movieservice";
 
+jest.mock('../ts/services/movieservice.ts');
+
 beforeEach(() => {
     document.body.innerHTML = '';
 });
@@ -56,6 +58,63 @@ describe('Tests for handleSubmit', () => {
 
         expect(getDataSpy).toBeCalledWith('A New Hope');
         getDataSpy.mockRestore();
+    });
+
+    test('Should call on createHtml if movies are added', async () =>{
+        document.body.innerHTML = `
+        <form id="searchForm">
+            <input type="text" id="searchText" placeholder="Skriv titel här" />
+            <button type="submit" id="search">Sök</button>
+        </form>
+        <div id="movie-container"></div>
+        `;
+
+        const movie = {  
+            Title: 'Revenge Of The Sith',
+            imdbID: 'tt0121766', 
+            Type: 'movie',
+            Poster: 'picture',
+            Year: '2005' 
+        };
+
+        const searchText = document.querySelector('#searchText') as HTMLInputElement;
+        searchText.value = 'Revenge Of The Sith';
+
+        let createHtmlSpy = jest.spyOn(movieApp, 'createHtml');
+
+        const getDataSpy = jest.spyOn(movieService, 'getData').mockReturnValue(new Promise<IMovie[]>((resolve) => {
+            resolve([movie]);
+        }));
+
+        await movieApp.handleSubmit();
+
+        expect(createHtmlSpy).toHaveBeenCalledTimes(1);
+        expect(getDataSpy).toBeCalledWith('Revenge Of The Sith');
+        expect(getDataSpy).toHaveBeenCalledTimes(1);
+
+        createHtmlSpy.mockRestore()
+        getDataSpy.mockRestore();
+
+    });
+
+    test('Should call on displayNoResult if movie isnt found - catch', async () =>{
+        document.body.innerHTML = `
+        <form id="searchForm">
+            <input type="text" id="searchText" placeholder="Skriv titel här" />
+            <button type="submit" id="search">Sök</button>
+        </form>
+        <div id="movie-container"></div>
+        `;
+
+        const searchText = document.querySelector('#searchText') as HTMLInputElement;
+        searchText.value = '';
+
+        let disPlayNoResultSpy = jest.spyOn(movieApp, 'displayNoResult').mockReturnValue(); 
+
+        await movieApp.handleSubmit();
+
+        expect(disPlayNoResultSpy).toBeCalled();
+        disPlayNoResultSpy.mockRestore();
     });
 });
 
