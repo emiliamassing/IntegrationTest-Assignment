@@ -18,5 +18,14 @@ describe('Tests for getData', () => {
         let dataResponse = await getData('test');
 
         expect(dataResponse.length).toBe(3);
+        expect(testData[0].Title).toEqual(dataResponse[0].Title);
+    });
+
+    test('Should not get data', async () => {
+        try{
+            let dataResponse = await getData('error');
+        } catch(error: any){
+            expect(error.length).toBe(0);
+        }
     });
 });
