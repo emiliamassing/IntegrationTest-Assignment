@@ -1,5 +1,5 @@
-import { getData } from "../ts/services/movieService";
-import { testData } from "../ts/services/__mocks__/movieService";
+import { getData } from "../ts/services/movieservice";
+import { testData } from "../ts/services/__mocks__/movieservice";
 
 jest.mock('axios', () =>({
     get: async (url: string) => {
@@ -14,6 +14,7 @@ jest.mock('axios', () =>({
 }));
 
 describe('Tests for getData', () => {
+    
     test('Should get data correctly', async () => {
         let dataResponse = await getData('test');
 

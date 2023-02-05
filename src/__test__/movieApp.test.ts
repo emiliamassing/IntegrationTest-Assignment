@@ -3,7 +3,7 @@
 */
 import { IMovie } from "../ts/models/Movie";
 import * as movieApp from "../ts/movieApp";
-import { getData } from "../ts/services/__mocks__/movieService";
+import { getData } from "../ts/services/__mocks__/movieservice";
 
 jest.mock('../ts/services/movieservice.ts');
 
@@ -12,6 +12,7 @@ beforeEach(() => {
 });
 
 describe('Tests for init', () => {
+
     test('Should spy on handleSubmit()', () =>{
         document.body.innerHTML = `
         <form id="searchForm">
@@ -33,6 +34,7 @@ describe('Tests for init', () => {
 });
 
 describe('Tests for handleSubmit', () => {
+
     test('Should use getData correctly and create html if movie is found', async () => {
         document.body.innerHTML = `
         <form id="searchForm">
@@ -116,6 +118,7 @@ describe('Tests for handleSubmit', () => {
 });
 
 describe('Tests for createHtml', () => {
+
     test('Should create elements and display movies', () => {
         document.body.innerHTML = `
             <div id="movie-container"></div>
@@ -156,6 +159,7 @@ describe('Tests for createHtml', () => {
 });
 
 describe('Tests for disPlayNoResult', () => {
+    
     test('Should create p element and display text', () => {
         document.body.innerHTML = `
             <div id="movie-container"></div>
